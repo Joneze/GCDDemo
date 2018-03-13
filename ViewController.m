@@ -123,7 +123,7 @@
 {
     //创建全局并行
     dispatch_group_t group = dispatch_group_create();
-    dispatch_queue_t globalQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    dispatch_queue_t globalQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0); //获取全局并发队列。dispatch_get_global_queue 是系统默认创建的全局并发队列
     
     //任务1
     dispatch_group_async(group, globalQueue, ^{
