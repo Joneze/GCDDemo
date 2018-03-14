@@ -23,6 +23,7 @@
 //    [self concurrentDispatchQueue];//并行列队
 //    [self concurrentQueueApply]; //并发队列的应用 6个任务完成后刷新UI
 //    [self multipleRequestsApply]; //限制线程个数的多任务并发应用
+//    [self dispatchSignal];
     [self SemaphoreDemo]; //Semaphore信号量的应用
 }
 
