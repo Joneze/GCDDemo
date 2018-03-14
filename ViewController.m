@@ -18,10 +18,12 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-//    [self serialDispatchQueue];
+//    [self serialDispatchQueue]; //串行列队
     
-//    [self concurrentDispatchQueue];
-    [self concurrentQueueApply];
+//    [self concurrentDispatchQueue];//并行列队
+//    [self concurrentQueueApply]; //并发队列的应用 6个任务完成后刷新UI
+//    [self multipleRequestsApply]; //限制线程个数的多任务并发应用
+    [self SemaphoreDemo]; //Semaphore信号量的应用
 }
 
 #pragma mark  ======== 串行列队 =========
@@ -212,11 +214,78 @@
     
 }
 
+
+#pragma mark  ======== 某界面存在多个请求，希望请求依次执行。 =========
+
+
+/**
+ 首先考虑到的是串行队列
+ */
+-(void)multipleRequestsApply
+{
+    const char *mutipleQueue = "mutipleQueue";
+    dispatch_queue_t serialQueue = dispatch_queue_create(mutipleQueue, DISPATCH_QUEUE_SERIAL);
+    
+    //任务1
+    dispatch_async(serialQueue, ^{
+        NSLog(@"执行了任务1");
+        [self getAdvertList:^{
+            
+        }];
+    });
+    
+    dispatch_async(serialQueue, ^{
+        NSLog(@"执行了任务2");
+        [self getHotCultureList:^{
+            
+        }];
+    });
+    
+    dispatch_async(serialQueue, ^{
+        NSLog(@"执行了任务3");
+        [self getSurroundCulture:^{
+            NSLog(@"在最后一个任务的回调里做其他的操作");
+        }];
+    });
+    
+    
+    
+}
+
+
+#pragma mark  ======== Semaphore信号量的应用 =========
+/**
+ 我们可以通过设置信号量的大小，来解决并发过多导致资源吃紧的情况，以单核CPU做并发为例，
+ 一个CPU永远只能干一件事情，那如何同时处理多个事件呢，聪明的内核工程师让CPU干第一件事情，
+ 一定时间后停下来，存取进度，干第二件事情以此类推，所以如果开启非常多的线程，单核CPU会变得非常吃力，
+ 即使多核CPU，核心数也是有限的，所以合理分配线程，变得至关重要，那么如何发挥多核CPU的性能呢？
+ 如果让一个核心模拟传很多线程，经常干一半放下干另一件事情，那效率也会变低，所以我们要合理安排，
+ 将单一任务或者一组相关任务并发至全局队列中运算或者将多个不相关的任务或者关联不紧密的任务并发至用户队列中运算，
+ 所以用好信号量，合理分配CPU资源，程序也能得到优化，当日常使用中，信号量也许我们只起到了一个计数的作用，真的有点大材小用。
+ 
+ */
+-(void)SemaphoreDemo
+{
+    dispatch_semaphore_t semaphore = dispatch_semaphore_create(10);//为了让一次输出10个，初始信号量为10
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    for (int i = 0; i <100; i++)
+    {
+        dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);//每进来1次，信号量-1;进来10次后就一直hold住，直到信号量大于0；
+        dispatch_async(queue, ^{
+            NSLog(@"%i",i);
+            sleep(2);
+            dispatch_semaphore_signal(semaphore);//由于这里只是log,所以处理速度非常快，我就模拟2秒后信号量+1;
+        });
+    }
+    
+}
+
+
 #pragma mark  ======== 模拟网络请求的6个方法 =========
 // 任务一
 - (void)getAdvertList:(void(^)(void))requestisScu{
     
-    sleep(3);
+    sleep(9);
     NSLog(@"完成了任务1");
     requestisScu();
 }
@@ -224,14 +293,14 @@
 // 任务2
 - (void)getHotCultureList:(void(^)(void))requestisScu{
     
-    sleep(3);
+    sleep(2);
     NSLog(@"完成了任务2");
     requestisScu();
 }
 
 // 任务3
 - (void)getSurroundCulture:(void(^)(void))requestisScu{
-    sleep(11);
+    sleep(2);
     NSLog(@"完成了任务3");
     requestisScu();
 }
