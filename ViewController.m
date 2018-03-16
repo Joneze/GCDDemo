@@ -4,13 +4,14 @@
 //
 //  Created by jay on 2018/3/12.
 //  Copyright © 2018年 曾辉. All rights reserved.
-//
+//  GCDdemo
 
 #import "ViewController.h"
 #import "AFNetworking.h"
 
 @interface ViewController ()
-
+@property(nonatomic,strong)UIImageView *imageView;
+@property(nonatomic,strong)UIImage * image2;
 @end
 
 @implementation ViewController
@@ -281,6 +282,37 @@
     
 }
 
+#pragma mark  ======== 开启异步下载图片，主线程刷新UI =========
+
+/**
+ 需求是在主线程构建UI，然后通过异步下载图片然后在主线程赋值给imageview，在主线程刷新UI
+ */
+-(void)refreshUIFromMainQueue
+{
+    _imageView = [UIImageView new];
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSError *error;
+        UIImage *image = nil;
+        __block CGFloat itemW = 640;
+        __block CGFloat itemH = 0;
+        
+        NSURL * url = [NSURL URLWithString:@"http://ystt.oss-cn-hangzhou.aliyuncs.com/rongzhi.png"]; //融资要求写死在阿里云上
+        NSData *responseData = [NSData dataWithContentsOfURL:url options:NSDataReadingMappedIfSafe error:&error];
+        image = [UIImage imageWithData:responseData];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            _imageView.image = _image2 = image;
+            //根据image的比例来设置高度
+            if (_image2.size.width) {
+                itemH = _image2.size.height / _image2.size.width * itemW;
+            }
+            _imageView.frame = CGRectMake(0, 0, itemW, itemH);
+            
+        });
+        
+    });
+}
 
 #pragma mark  ======== 模拟网络请求的6个方法 =========
 // 任务一
