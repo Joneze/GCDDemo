@@ -1,0 +1,39 @@
+//
+//  GCDPrefix.pch
+//  GCDDemo
+//
+//  Created by jay on 2018/3/26.
+//  Copyright © 2018年 曾辉. All rights reserved.
+//
+#ifdef DEBUG
+
+#define NSLog(FORMAT, ...) fprintf(stderr,"%s:%d\t%s\n",[[[NSString stringWithUTF8String:__FILE__] lastPathComponent] UTF8String], __LINE__, [[NSString stringWithFormat:FORMAT, ##__VA_ARGS__] UTF8String]);
+
+#else
+
+#define NSLog(...)
+
+#endif
+
+#ifndef GCDPrefix_pch
+#define GCDPrefix_pch
+
+#define DEVICE_WIDTH [UIScreen mainScreen].bounds.size.width
+#define DEVICE_HEIGHT [UIScreen mainScreen].bounds.size.height
+
+#define JM_iPhoneX                  (DEVICE_WIDTH == 375 && DEVICE_HEIGHT == 812 ? true:false)
+#define JMNavibarH                 (JM_iPhoneX ? 88 : 64)
+#define JMTabbarH                  (JM_iPhoneX ? (49 + 34) : 49)
+#define JMStatusbarH               (JM_iPhoneX ? 44 : 20)
+#define JMHeightGap                (JM_iPhoneX ? 122 : 64)  //主要用于tableview的高度 122 是根据iPhone X 上下安全高度 64+34+24
+#define JMBottomOffset             (JM_iPhoneX ? 34:0) //底部高度差
+
+//#define WeakObj(o) autoreleasepool{} __weak typeof(o) o##Weak = o;  //全局weakself宏
+#define WeakObj(type)  __weak typeof(type) type##Weak = type;
+
+//颜色
+#define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
+
+#define JMColor UIColorFromRGB(0xec6121)
+
+#endif /* GCDPrefix_pch */
