@@ -7,11 +7,13 @@
 //  GCDdemo
 
 #import "ViewController.h"
+#import "GCDDemoViewController.h"
+#import "RACDemoViewController.h"
 
 
 @interface ViewController ()<UITableViewDelegate,UITableViewDataSource>
 @property(nonatomic,strong)UITableView *tableView;
-@property(nonatomic,copy)NSDictionary *cellDic;
+@property(nonatomic,copy)NSArray *cellArrData;
 @end
 
 @implementation ViewController
@@ -37,7 +39,7 @@
     [super viewDidLoad];
     
     self.title = @"主页面";
-    
+    [self confinCellData];
     [self.view addSubview:self.tableView];
     
 }
@@ -50,7 +52,7 @@
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 10;
+    return self.cellArrData.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -61,6 +63,8 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellWithIdentifier];
     }
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    
+    cell.textLabel.text = self.cellArrData[indexPath.section];
     
     return cell;
     
@@ -80,6 +84,32 @@
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
     return 0.1f;
+}
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    switch (indexPath.section) {
+        case 0:
+        {
+            GCDDemoViewController *gcdView = [GCDDemoViewController new];
+            [self.navigationController pushViewController:gcdView animated:YES];
+        }
+            break;
+        
+        case 1:
+        {
+            RACDemoViewController *racView = [RACDemoViewController new];
+            [self.navigationController pushViewController:racView animated:YES];
+        }
+            break;
+            
+        default:
+            break;
+    }
+}
+
+-(void)confinCellData{
+    self.cellArrData = @[@"GCD Demo",@"RAC demo"];
 }
 
 - (void)didReceiveMemoryWarning {

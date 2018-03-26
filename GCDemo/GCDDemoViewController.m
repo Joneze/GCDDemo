@@ -18,7 +18,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.title = @"多线程demo";
     
+    self.view.backgroundColor = [UIColor whiteColor];
     //    [self serialDispatchQueue]; //串行列队
     
     [self concurrentDispatchQueue];//并行列队

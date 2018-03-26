@@ -7,7 +7,7 @@
 //
 
 #import "RACDemoViewController.h"
-
+#import "RACFirstView.h"
 @interface RACDemoViewController ()
 
 @end
@@ -16,22 +16,17 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    self.title = @"响应式编程 demo";
+    
+    RACFirstView *firstView = [[RACFirstView alloc] initWithFrame:CGRectMake(0, 100, DEVICE_WIDTH, 100)];
+    
+        
+    [self.view addSubview:firstView];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

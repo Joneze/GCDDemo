@@ -6,8 +6,8 @@
 //  Copyright © 2018年 曾辉. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "GCDBaseViewController.h"
 
-@interface RACDemoViewController : UIViewController
+@interface RACDemoViewController : GCDBaseViewController
 
 @end
