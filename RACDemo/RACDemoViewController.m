@@ -18,9 +18,8 @@
     [super viewDidLoad];
     self.title = @"响应式编程 demo";
     
-    RACFirstView *firstView = [[RACFirstView alloc] initWithFrame:CGRectMake(0, 100, DEVICE_WIDTH, 100)];
+    RACFirstView *firstView = [[RACFirstView alloc] initWithFrame:CGRectMake(0, 100, DEVICE_WIDTH, 200)];
     
-        
     [self.view addSubview:firstView];
 }
 

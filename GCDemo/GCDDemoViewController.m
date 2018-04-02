@@ -21,9 +21,9 @@
     self.title = @"多线程demo";
     
     self.view.backgroundColor = [UIColor whiteColor];
-    //    [self serialDispatchQueue]; //串行列队
+        [self serialDispatchQueue]; //串行列队
     
-    [self concurrentDispatchQueue];//并行列队
+//    [self concurrentDispatchQueue];//并行列队
 //        [self concurrentQueueApply]; //并发队列的应用 6个任务完成后刷新UI
     //    [self multipleRequestsApply]; //限制线程个数的多任务并发应用
     //    [self dispatchSignal];
@@ -35,6 +35,7 @@
 //串行队列
 -(void)serialDispatchQueue{
     
+    NSLog(@"主线程");
     //首先创建一个全局列队 global 也可以直接创建serial 正常情况global用在并发列队里
     dispatch_queue_t globalQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0); //DISPATCH_QUEUE_PRIORITY_DEFAULT 默认优先级，第二个传递除0之外的任何值都可能导致NULL返回值。
     
@@ -49,13 +50,14 @@
         
         NSLog(@"--- 0000");
         
-        dispatch_async(serialQueue, ^{
+        
+        dispatch_sync(serialQueue, ^{
             sleep(6);
             NSLog(@"---- 1111");
         });
         
         
-        dispatch_async(serialQueue, ^{
+        dispatch_sync(serialQueue, ^{
             sleep(3);
             NSLog(@"---- 2222");
         });
@@ -65,7 +67,7 @@
         //            NSLog(@"有没有同步主线程?");
         //        });
         
-        dispatch_async(serialQueue, ^{
+        dispatch_sync(serialQueue, ^{
             sleep(1);
             NSLog(@"---- 3333");
         });
@@ -73,8 +75,7 @@
         NSLog(@"---- 提交结束");
     });
     
-    //打印结果 1、0000 2、 提交结束 3、 1111 ，4、2222， 5、3333，注意加了sleep能更好的理解同步的概念, 有意思的是在中间加了跳转到主线程后发现打印顺序有变化。
-    
+    NSLog(@"看看有没有堵塞");
 }
 
 #pragma mark  ======== 并行列队 =========
