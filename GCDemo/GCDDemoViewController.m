@@ -62,10 +62,10 @@
             NSLog(@"---- 2222");
         });
         
-        //回跳转到主线程、注意此线程如果直接在主线程调用，会导致锁死，蹦掉
-        //        dispatch_sync(dispatch_get_main_queue(), ^{
-        //            NSLog(@"有没有同步主线程?");
-        //        });
+//        回跳转到主线程、注意此线程如果直接在主线程调用，会导致锁死，蹦掉
+//                dispatch_sync(dispatch_get_main_queue(), ^{
+//                    NSLog(@"有没有同步主线程?");
+//                });
         
         dispatch_sync(serialQueue, ^{
             sleep(1);

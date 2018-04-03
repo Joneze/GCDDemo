@@ -36,10 +36,18 @@
 
 -(void)intRacFoo
 {
+    //单个信号量映射
     RACSignal *userNameSingnal = [self.userNameInput.rac_textSignal map:^id (NSString * value) {
+        
         return @(value.length>0);
     }];
-    self.buttonFirst.rac_command = [[RACCommand alloc] initWithEnabled:userNameSingnal signalBlock:^RACSignal * _Nonnull(id  _Nullable input) {
+    
+    //多个输入框信号量元祖集合
+    RACSignal *enabeldSignal = [[RACSignal combineLatest:@[self.userNameInput.rac_textSignal,self.passwordInput.rac_textSignal]] map:^id _Nullable(RACTuple * _Nullable value) {
+        return @([value[0] length]>0&&[value[1] length]>=6);
+    }];
+    
+    self.buttonFirst.rac_command = [[RACCommand alloc] initWithEnabled:enabeldSignal signalBlock:^RACSignal * _Nonnull(id  _Nullable input) {
         return [RACSignal empty];
     }];
 }
@@ -47,13 +55,13 @@
 -(void)configUIForView
 {
     self.buttonFirst = ({
-        UIButton *button = [UIButton new];
+        UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
         [button setTitle:@"登陆" forState:UIControlStateNormal];
-        [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-//        [[button rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(__kindof UIControl * _Nullable x) {
-//            NSLog(@"点了");
-//            NSLog(@"--- %@",x);
-//        }];
+//        [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+//        [button setBackgroundColor:[UIColor orangeColor]];
+        [[button rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(__kindof UIControl * _Nullable x) {
+            NSLog(@"点了");
+        }];
         [self addSubview:button];
         button;
     });
