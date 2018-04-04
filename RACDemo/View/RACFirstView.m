@@ -37,10 +37,10 @@
 -(void)intRacFoo
 {
     //单个信号量映射
-    RACSignal *userNameSingnal = [self.userNameInput.rac_textSignal map:^id (NSString * value) {
-        
-        return @(value.length>0);
-    }];
+//    RACSignal *userNameSingnal = [self.userNameInput.rac_textSignal map:^id (NSString * value) {
+//
+//        return @(value.length>0);
+//    }];
     
     //多个输入框信号量元祖集合
     RACSignal *enabeldSignal = [[RACSignal combineLatest:@[self.userNameInput.rac_textSignal,self.passwordInput.rac_textSignal]] map:^id _Nullable(RACTuple * _Nullable value) {

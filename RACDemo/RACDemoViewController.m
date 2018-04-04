@@ -8,6 +8,8 @@
 
 #import "RACDemoViewController.h"
 #import "RACFirstView.h"
+#import "RACSliderView.h"
+
 @interface RACDemoViewController ()
 
 @end
@@ -16,11 +18,14 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.view.backgroundColor = [UIColor lightGrayColor];
     self.title = @"响应式编程 demo";
     
     RACFirstView *firstView = [[RACFirstView alloc] initWithFrame:CGRectMake(0, 100, DEVICE_WIDTH, 200)];
-    
     [self.view addSubview:firstView];
+    
+    RACSliderView *sliderView = [[RACSliderView alloc] initWithFrame:CGRectMake(0, 300, DEVICE_WIDTH, 400)];
+    [self.view addSubview:sliderView];
 }
 
 - (void)didReceiveMemoryWarning {
