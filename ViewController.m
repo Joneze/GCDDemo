@@ -9,7 +9,7 @@
 #import "ViewController.h"
 #import "GCDDemoViewController.h"
 #import "RACDemoViewController.h"
-
+#import "RuntimeDemoViewController.h"
 
 @interface ViewController ()<UITableViewDelegate,UITableViewDataSource>
 @property(nonatomic,strong)UITableView *tableView;
@@ -41,7 +41,6 @@
     self.title = @"主页面";
     [self confinCellData];
     [self.view addSubview:self.tableView];
-    
 }
 
 #pragma mark - tableView delegate
@@ -103,13 +102,20 @@
         }
             break;
             
+        case 2:
+        {
+            RuntimeDemoViewController *racView = [RuntimeDemoViewController new];
+            [self.navigationController pushViewController:racView animated:YES];
+        }
+            break;
+            
         default:
             break;
     }
 }
 
 -(void)confinCellData{
-    self.cellArrData = @[@"GCD Demo",@"RAC demo"];
+    self.cellArrData = @[@"GCD Demo",@"RAC demo",@"Runtime demo"];
 }
 
 - (void)didReceiveMemoryWarning {
