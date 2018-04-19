@@ -10,6 +10,7 @@
 #import "GCDDemoViewController.h"
 #import "RACDemoViewController.h"
 #import "RuntimeDemoViewController.h"
+#import "QRCodeViewController.h"
 
 @interface ViewController ()<UITableViewDelegate,UITableViewDataSource>
 @property(nonatomic,strong)UITableView *tableView;
@@ -108,6 +109,12 @@
             [self.navigationController pushViewController:racView animated:YES];
         }
             break;
+        case 3:
+        {
+            QRCodeViewController *racView = [QRCodeViewController new];
+            [self.navigationController pushViewController:racView animated:YES];
+        }
+            break;
             
         default:
             break;
@@ -115,7 +122,7 @@
 }
 
 -(void)confinCellData{
-    self.cellArrData = @[@"GCD Demo",@"RAC demo",@"Runtime demo"];
+    self.cellArrData = @[@"GCD Demo",@"RAC demo",@"Runtime demo",@"二维码生成"];
 }
 
 - (void)didReceiveMemoryWarning {

@@ -25,11 +25,12 @@
     
     //交换fun1和fun2里面的实现
     [self exchangeFunction];
-    
     Person *person = [Person new];
     [person fun1];
     [person fun2];
 }
+
+
 
 -(void)getAllIvars{
     Person *person = [Person new];
