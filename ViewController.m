@@ -15,6 +15,7 @@
 @interface ViewController ()<UITableViewDelegate,UITableViewDataSource>
 @property(nonatomic,strong)UITableView *tableView;
 @property(nonatomic,copy)NSArray *cellArrData;
+
 @end
 
 @implementation ViewController
@@ -42,6 +43,9 @@
     self.title = @"主页面";
     [self confinCellData];
     [self.view addSubview:self.tableView];
+    
+    
+    
 }
 
 #pragma mark - tableView delegate

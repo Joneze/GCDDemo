@@ -4,7 +4,7 @@
 //
 //  Created by jay on 2018/4/18.
 //  Copyright © 2018年 曾辉. All rights reserved.
-//
+// 如何使用Runtime获取一个类的成员变量，属性，方法，协议。如何动态修改一个类的变量值，如何交换方法的实现，如何动态添加类。
 
 #import "RuntimeDemoViewController.h"
 #import "Person.h"
@@ -28,10 +28,14 @@
     Person *person = [Person new];
     [person fun1];
     [person fun2];
+    
+    //动态创建类
+    [self addMethodFromRuntime];
 }
 
 
-
+#pragma mark  ======== //获取类属性 =========
+//获取类属性
 -(void)getAllIvars{
     Person *person = [Person new];
     person.name = @"张三";
@@ -57,6 +61,7 @@
     
 }
 
+#pragma mark  ======== //获取方法列表 =========
 //获取方法列表
 
 /**
@@ -82,9 +87,7 @@
 }
 
 
-//交换方法
-
-
+#pragma mark  ======== //交换方法 =========
 /**
  SEL method_getName(Method m); //获取方法名
  IMP method_getImplementation(Method m)； //返回方法的实现
@@ -101,6 +104,42 @@
     
     method_exchangeImplementations(method1, method2);
 }
+
+
+#pragma mark  ======== 动态创建类 =========
+-(void)addMethodFromRuntime
+{
+    Class cls = objc_allocateClassPair([NSObject class], "runtimeClass", 0);
+    
+    class_addIvar(cls, "name", sizeof(NSString *), log2(sizeof(NSString *)), @encode(NSString *));
+    class_addIvar(cls, "age", sizeof(int), sizeof(int), @encode(int));
+    SEL s = sel_registerName("testRuntimeMethod");
+    class_addMethod(cls, s, (IMP)testRuntimeMethodIMP, "i@:@");
+    
+    objc_registerClassPair(cls);
+    
+    
+    id person = [cls new];
+    NSLog(@"实例所属类:%@，实例所属类的父类:%@",object_getClass(person),class_getSuperclass(object_getClass(person)));
+
+    Ivar nameIvar = class_getInstanceVariable(cls, "name");
+    [person setValue:@"xiaFan" forKey:@"name"];
+    
+    Ivar ageIvar = class_getInstanceVariable(cls, "age");
+    object_setIvar(person, ageIvar, @18);
+    
+    NSLog(@"看看实例变量值的person的值%@||%@",object_getIvar(person, nameIvar),object_getIvar(person, ageIvar));
+    
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:@"giy",@"name",@"25",@"age", nil];
+    [person performSelector:@selector(testRuntimeMethod) withObject:dic];
+}
+
+void testRuntimeMethodIMP(id self , SEL _cmd, NSDictionary *dic)
+{
+    NSLog(@"打印传递进来的dic：%@",dic);
+    NSLog(@"成员变量的名称%@",object_getIvar(self, class_getInstanceVariable([self class], "name")));
+}
+
 
 
 - (void)didReceiveMemoryWarning {

@@ -177,6 +177,7 @@
         }];
     });
     
+    //如果在任务1-6里面有又有异步线程的话，不会等到结果就会执行到下面这个语句，此时应该加入dispatch_group_enter和dispatch_group_leave
     //信息汇总 监听group组中任务的完成状态，当所有的任务都执行完成后，触发block块，执行总结性处理。
     dispatch_group_notify(group, globalQueue, ^{
         
