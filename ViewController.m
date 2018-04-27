@@ -11,6 +11,7 @@
 #import "RACDemoViewController.h"
 #import "RuntimeDemoViewController.h"
 #import "QRCodeViewController.h"
+#import "FingerprintDemoViewController.h"
 
 @interface ViewController ()<UITableViewDelegate,UITableViewDataSource>
 @property(nonatomic,strong)UITableView *tableView;
@@ -119,6 +120,12 @@
             [self.navigationController pushViewController:racView animated:YES];
         }
             break;
+        case 4:
+        {
+            FingerprintDemoViewController *racView = [FingerprintDemoViewController new];
+            [self.navigationController pushViewController:racView animated:YES];
+        }
+            break;
             
         default:
             break;
@@ -126,7 +133,7 @@
 }
 
 -(void)confinCellData{
-    self.cellArrData = @[@"GCD Demo",@"RAC demo",@"Runtime demo",@"二维码生成"];
+    self.cellArrData = @[@"GCD Demo",@"RAC demo",@"Runtime demo",@"二维码生成",@"指纹支付"];
 }
 
 - (void)didReceiveMemoryWarning {
