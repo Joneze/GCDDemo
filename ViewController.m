@@ -12,7 +12,6 @@
 #import "RuntimeDemoViewController.h"
 #import "QRCodeViewController.h"
 #import "FingerprintDemoViewController.h"
-
 @interface ViewController ()<UITableViewDelegate,UITableViewDataSource>
 @property(nonatomic,strong)UITableView *tableView;
 @property(nonatomic,copy)NSArray *cellArrData;
@@ -44,8 +43,6 @@
     self.title = @"主页面";
     [self confinCellData];
     [self.view addSubview:self.tableView];
-    
-    
     
 }
 
@@ -134,6 +131,25 @@
 
 -(void)confinCellData{
     self.cellArrData = @[@"GCD Demo",@"RAC demo",@"Runtime demo",@"二维码生成",@"指纹支付"];
+}
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    if (@available(iOS 11.0, *)) {
+        self.navigationController.navigationBar.prefersLargeTitles = YES;
+        [self.navigationItem setLargeTitleDisplayMode:UINavigationItemLargeTitleDisplayModeAutomatic];
+    }
+    
+}
+
+-(void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    if (@available(iOS 11.0, *)) {
+        self.navigationController.navigationBar.prefersLargeTitles = NO;
+    }
 }
 
 - (void)didReceiveMemoryWarning {
